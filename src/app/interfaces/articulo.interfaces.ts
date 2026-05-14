@@ -23,3 +23,13 @@ export interface ArticuloInterface {
   stock: number | null;
   codigoBarras: string | null;
 }
+
+export interface MarcaInterface {
+  id: number | null;
+  nombre: string | null;
+}
+
+export interface MarcasResult {
+  status: ApiStatus;
+  list: MarcaInterface[];
+}

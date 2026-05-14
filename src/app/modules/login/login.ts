@@ -22,10 +22,14 @@ import {
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { Router } from '@angular/router';
+import { MarcasResult } from '@interfaces/articulo.interfaces';
 import { LoginData, LoginResult } from '@interfaces/interfaces';
 import ApiStatus from '@model/enum/api-status.enum';
+import Marca from '@model/marca.model';
 import User from '@model/user.model';
 import ApiUsersService from '@services/api-users.service';
+import ApiService from '@services/api.service';
+import ClassMapperService from '@services/class-mapper.service';
 import UserService from '@services/user.service';
 import LoadingIcon from '@shared/loading-icon/loading-icon';
 
@@ -50,7 +54,9 @@ import LoadingIcon from '@shared/loading-icon/loading-icon';
 })
 export default class LoginComponent implements OnInit {
   private readonly aus: ApiUsersService = inject(ApiUsersService);
+  private readonly as: ApiService = inject(ApiService);
   private readonly us: UserService = inject(UserService);
+  private readonly cms: ClassMapperService = inject(ClassMapperService);
   private readonly router: Router = inject(Router);
 
   loginModel: WritableSignal<LoginData> = signal<LoginData>({
@@ -93,7 +99,11 @@ export default class LoginComponent implements OnInit {
           this.us.user = new User().fromInterface(result.user);
           this.us.saveLogin();
 
-          this.router.navigate(['/main']);
+          this.as.getMarcas().subscribe((result: MarcasResult): void => {
+            const marcas: Marca[] = this.cms.getMarcas(result.list);
+            this.as.marcas = marcas;
+            this.router.navigate(['/main']);
+          });
         } else {
           this.loading.set(false);
           this.loginError.set(true);

@@ -48,6 +48,7 @@ export default class Main {
   codBarras: string = '';
 
   articulo: Articulo | null = null;
+  marca: WritableSignal<string> = signal<string>('');
   showLoading: WritableSignal<boolean> = signal<boolean>(false);
   showArticulo: WritableSignal<boolean> = signal<boolean>(false);
   saving: WritableSignal<boolean> = signal<boolean>(false);
@@ -66,6 +67,7 @@ export default class Main {
         this.showLoading.set(false);
         if (result.status === ApiStatus.OK && result.articulo) {
           this.articulo = this.classMapperService.getArticulo(result.articulo);
+          this.marca.set(this.apiService.getMarca(this.articulo.idMarca ?? 0)?.nombre ?? '');
           console.log(this.articulo);
           this.showArticulo.set(true);
         }

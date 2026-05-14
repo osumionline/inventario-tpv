@@ -9,6 +9,7 @@ const routes: Routes = [
     loadComponent: () => import('@modules/main/main'),
     canActivate: [isLoggedGuardFn],
   },
+  { path: '**', redirectTo: '/', pathMatch: 'full' },
 ];
 
 export default routes;

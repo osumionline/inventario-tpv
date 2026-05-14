@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ArticuloInterface } from '@interfaces/articulo.interfaces';
+import { ArticuloInterface, MarcaInterface } from '@interfaces/articulo.interfaces';
 import { UserInterface } from '@interfaces/user.interfaces';
 import Articulo from '@model/articulo.model';
+import Marca from '@model/marca.model';
 import User from '@model/user.model';
 
 @Injectable({
@@ -20,5 +21,21 @@ export default class ClassMapperService {
 
   getArticulo(a: ArticuloInterface): Articulo {
     return new Articulo().fromInterface(a);
+  }
+
+  getArticulos(as: ArticuloInterface[]): Articulo[] {
+    return as.map((a: ArticuloInterface): Articulo => {
+      return this.getArticulo(a);
+    });
+  }
+
+  getMarca(m: MarcaInterface): Marca {
+    return new Marca().fromInterface(m);
+  }
+
+  getMarcas(ms: MarcaInterface[]): Marca[] {
+    return ms.map((m: MarcaInterface): Marca => {
+      return this.getMarca(m);
+    });
   }
 }
