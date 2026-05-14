@@ -1,0 +1,27 @@
+<div class="scanner">
+    <video #video
+           autoplay
+           muted
+           playsinline></video>
+
+    <div class="target">
+        <div class="line"></div>
+    </div>
+
+    @if (loading()) {
+    <div class="loading">
+        <mat-progress-spinner mode="indeterminate" />
+    </div>
+    }
+
+    @if (error() !== '') {
+    <div class="error">
+        {{ error() }}
+    </div>
+    }
+
+    <button matButton="filled"
+            (click)="close()">
+        Cancelar
+    </button>
+</div>

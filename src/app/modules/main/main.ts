@@ -1,6 +1,7 @@
 import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
@@ -14,6 +15,7 @@ import { LocalizadorResult, StatusResult } from '@interfaces/articulo.interfaces
 import Articulo from '@model/articulo.model';
 import ApiService from '@services/api.service';
 import ClassMapperService from '@services/class-mapper.service';
+import BarcodeScanner from '@shared/barcode-scanner/barcode-scanner';
 
 @Component({
   selector: 'app-home',
@@ -36,6 +38,7 @@ import ClassMapperService from '@services/class-mapper.service';
     FormsModule,
     MatProgressSpinner,
     MatButton,
+    MatDialogModule,
   ],
   templateUrl: './main.html',
   styleUrl: './main.scss',
@@ -43,6 +46,7 @@ import ClassMapperService from '@services/class-mapper.service';
 export default class Main {
   private readonly apiService: ApiService = inject(ApiService);
   private readonly classMapperService: ClassMapperService = inject(ClassMapperService);
+  private readonly dialog: MatDialog = inject(MatDialog);
 
   opened: WritableSignal<boolean> = signal<boolean>(false);
   codBarras: string = '';
@@ -58,9 +62,33 @@ export default class Main {
     this.opened.set(true);
   }
 
+  openScanner(): void {
+    const dialogRef = this.dialog.open(BarcodeScanner, {
+      width: '100vw',
+      maxWidth: '100vw',
+      height: '100vh',
+      panelClass: 'scanner-dialog',
+    });
+
+    dialogRef.afterClosed().subscribe((code: string | null | undefined): void => {
+      if (code) {
+        this.codBarras = code;
+        this.checkLocalizador();
+      }
+    });
+  }
+
   checkLocalizador(): void {
+    const code: string = this.codBarras.trim();
+
+    if (code === '') {
+      return;
+    }
+
+    this.saved.set(false);
     this.showArticulo.set(false);
     this.showLoading.set(true);
+
     this.apiService
       .checkLocalizador(this.codBarras)
       .subscribe((result: LocalizadorResult): void => {
