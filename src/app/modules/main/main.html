@@ -31,5 +31,77 @@
                 <span class="spacer">Inventario TPV</span>
             </mat-toolbar-row>
         </mat-toolbar>
+        <div class="camera-row">
+            <mat-form-field class="cod-barras"
+                            subscriptSizing="dynamic">
+                <mat-label>Código barras</mat-label>
+                <input matInput
+                       [(ngModel)]="codBarras"
+                       (keyup.enter)="checkLocalizador()"
+                       #codBarrasBox>
+            </mat-form-field>
+            <button mat-icon-button
+                    (click)="checkLocalizador()">
+                <mat-icon>photo_camera</mat-icon>
+            </button>
+        </div>
+        @if (showLoading()) {
+        <div class="loading-row">
+            <mat-progress-spinner mode="indeterminate"
+                                  class="spinner" />
+        </div>
+        }
+        @if (showArticulo()) {
+        <div class="title-row">
+            {{ articulo!.nombre }}
+        </div>
+        <div class="subtitle-row">
+            <span>Marca: {{ articulo!.idMarca }}</span>
+            <span>Referencia: {{ articulo!.referencia }}</span>
+        </div>
+        <div class="pvp-row">
+            <mat-form-field class="pvp-box"
+                            subscriptSizing="dynamic">
+                <mat-label>PVP</mat-label>
+                <input matInput
+                       [(ngModel)]="articulo!.pvp"
+                       [disabled]="saving()"
+                       #pvpBox>
+                <span matTextSuffix>€</span>
+            </mat-form-field>
+        </div>
+        <div class="stock-row">
+            <button matButton="filled"
+                    (click)="downStock()"
+                    [disabled]="saving()">-</button>
+            <mat-form-field class="stock-box"
+                            subscriptSizing="dynamic">
+                <mat-label>Stock</mat-label>
+                <input matInput
+                       [(ngModel)]="articulo!.stock"
+                       [disabled]="saving()"
+                       #stockBox>
+            </mat-form-field>
+            <button matButton="filled"
+                    (click)="upStock()"
+                    [disabled]="saving()">+</button>
+        </div>
+        <div class="save-row">
+            <button matButton="filled"
+                    (click)="save()"
+                    [disabled]="saving()">
+                @if (saving()) {
+                <img src="/img/loading.svg"
+                     alt="Guardando">
+                }
+                @else if (saved()) {
+                GUARDADO
+                }
+                @else {
+                GUARDAR
+                }
+            </button>
+        </div>
+        }
     </mat-sidenav-content>
 </mat-sidenav-container>

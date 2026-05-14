@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://apiinventariotpv.osumi.es/api/',
+  apiUrl: 'https://apiinventariotpv.osumi.dev/api/',
 };

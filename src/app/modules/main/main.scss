@@ -5,18 +5,84 @@
     left: 0;
     right: 0;
 
-    .entries-count {
-        display: inline-block;
-        padding: 6px 12px;
-        margin-left: 8px;
-        border-radius: 12px;
-        background-color: var(--color-blue);
-        color: var(--color-white);
+    .camera-row {
+        display: flex;
+        padding: 16px;
+        align-items: center;
+
+        .cod-barras {
+            flex: 1;
+            margin-right: 16px;
+        }
     }
 
-    .add {
-        position: fixed;
-        bottom: 16px;
-        right: 16px;
+    .loading-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .spinner {
+            width: 100px;
+            height: 100px;
+        }
+    }
+
+    .title-row {
+        padding: 0 16px 16px 16px;
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .subtitle-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 18px;
+        padding: 0 16px 16px 16px;
+        color: #888;
+    }
+
+    .pvp-row {
+        padding: 0 16px 16px 16px;
+
+        .pvp-box {
+            width: 100%;
+        }
+    }
+
+    .stock-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 0 16px 16px 16px;
+
+        button {
+            width: 20%;
+            font-size: 48px;
+        }
+
+        .stock-box {
+            flex: 1;
+            margin: 0 16px;
+        }
+
+        input {
+            text-align: center;
+        }
+    }
+
+    .save-row {
+        display: flex;
+        justify-content: center;
+        padding: 0 16px 16px 16px;
+
+        button {
+            width: 100%;
+            font-size: 24px;
+
+            img {
+                width: 24px;
+                height: 24px;
+            }
+        }
     }
 }
