@@ -1,0 +1,28 @@
+{
+  "name": "Inventario App",
+  "short_name": "Inventario",
+  "description": "Aplicación para gestionar el inventario de artículos de Osumi TPV.",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#005cbb",
+  "start_url": "/",
+  "orientation": "portrait",
+  "id": "/",
+  "icons": [
+    {
+      "src": "/icons/icon-180x180.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
