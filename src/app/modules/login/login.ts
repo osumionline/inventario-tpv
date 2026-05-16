@@ -80,7 +80,7 @@ export default class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.us.logged) {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/main']);
     }
     this.username().nativeElement.focus();
   }

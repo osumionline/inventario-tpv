@@ -1,7 +1,13 @@
 import { registerLocaleData } from '@angular/common';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import esLocale from '@angular/common/locales/es';
-import { ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners } from '@angular/core';
+import {
+  ApplicationConfig,
+  inject,
+  LOCALE_ID,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+} from '@angular/core';
 import {
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
   MatFormFieldDefaultOptions,
@@ -16,6 +22,7 @@ import {
 import routes from '@app/app.routes';
 import TokenInterceptor from '@interceptors/token.interceptor';
 import provideCore from '@modules/core';
+import UserService from '@services/user.service';
 
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline',
@@ -29,6 +36,7 @@ registerLocaleData(esLocale);
 
 const appConfig: ApplicationConfig = {
   providers: [
+    provideAppInitializer((): void => inject(UserService).loadLogin()),
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: appearance },
     { provide: LOCALE_ID, useValue: 'es-ES' },
     provideRouter(
