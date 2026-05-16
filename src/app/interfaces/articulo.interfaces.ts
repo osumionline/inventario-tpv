@@ -19,8 +19,10 @@ export interface ArticuloInterface {
   palb: number | null;
   puc: number | null;
   pvp: number | null;
+  pvpPrevio?: number | null;
   referencia: string | null;
   stock: number | null;
+  stockPrevio?: number | null;
   codigoBarras: string | null;
 }
 

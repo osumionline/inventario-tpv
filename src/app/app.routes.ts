@@ -9,6 +9,11 @@ const routes: Routes = [
     loadComponent: () => import('@modules/main/main'),
     canActivate: [isLoggedGuardFn],
   },
+  {
+    path: 'list',
+    loadComponent: () => import('@modules/list/list'),
+    canActivate: [isLoggedGuardFn],
+  },
   { path: '**', redirectTo: '/', pathMatch: 'full' },
 ];
 

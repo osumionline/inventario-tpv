@@ -9,12 +9,13 @@ import { MatListItem, MatListItemIcon, MatNavList } from '@angular/material/list
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import ApiStatus from '@enum/api-status.enum';
 import { LocalizadorResult, StatusResult } from '@interfaces/articulo.interfaces';
 import Articulo from '@model/articulo.model';
 import ApiService from '@services/api.service';
 import ClassMapperService from '@services/class-mapper.service';
+import UserService from '@services/user.service';
 import BarcodeScanner from '@shared/barcode-scanner/barcode-scanner';
 
 @Component({
@@ -46,7 +47,9 @@ import BarcodeScanner from '@shared/barcode-scanner/barcode-scanner';
 export default class Main {
   private readonly apiService: ApiService = inject(ApiService);
   private readonly classMapperService: ClassMapperService = inject(ClassMapperService);
+  private readonly userService: UserService = inject(UserService);
   private readonly dialog: MatDialog = inject(MatDialog);
+  private readonly router: Router = inject(Router);
 
   opened: WritableSignal<boolean> = signal<boolean>(false);
   codBarras: string = '';
@@ -88,6 +91,7 @@ export default class Main {
     }
 
     this.showError.set(false);
+    this.showNotFound.set(false);
     this.saved.set(false);
     this.showArticulo.set(false);
     this.showLoading.set(true);
@@ -116,6 +120,11 @@ export default class Main {
     });
   }
 
+  logout(): void {
+    this.userService.logout();
+    this.router.navigate(['/']);
+  }
+
   downStock(): void {
     if (this.articulo !== null && this.articulo.stock !== null && this.articulo.stock > 0) {
       this.articulo.stock = this.articulo.stock - 1;
@@ -131,6 +140,8 @@ export default class Main {
   save(): void {
     if (this.articulo !== null) {
       console.log(this.articulo.toInterface());
+      console.log('Diferencia PVP: ' + this.articulo.diferenciaPVP);
+      console.log('Diferencia Stock: ' + this.articulo.diferenciaStock);
       this.saving.set(true);
       this.apiService
         .saveArticulo(this.articulo.toInterface())
