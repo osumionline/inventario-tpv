@@ -57,6 +57,8 @@ export default class Main {
   showArticulo: WritableSignal<boolean> = signal<boolean>(false);
   saving: WritableSignal<boolean> = signal<boolean>(false);
   saved: WritableSignal<boolean> = signal<boolean>(false);
+  showError: WritableSignal<boolean> = signal<boolean>(false);
+  showNotFound: WritableSignal<boolean> = signal<boolean>(false);
 
   showMenu(): void {
     this.opened.set(true);
@@ -85,13 +87,13 @@ export default class Main {
       return;
     }
 
+    this.showError.set(false);
     this.saved.set(false);
     this.showArticulo.set(false);
     this.showLoading.set(true);
 
-    this.apiService
-      .checkLocalizador(this.codBarras)
-      .subscribe((result: LocalizadorResult): void => {
+    this.apiService.checkLocalizador(this.codBarras).subscribe({
+      next: (result: LocalizadorResult): void => {
         this.showLoading.set(false);
         if (result.status === ApiStatus.OK && result.articulo) {
           this.articulo = this.classMapperService.getArticulo(result.articulo);
@@ -99,7 +101,19 @@ export default class Main {
           console.log(this.articulo);
           this.showArticulo.set(true);
         }
-      });
+        if (result.status === ApiStatus.OK && result.articulo === null) {
+          this.showNotFound.set(true);
+        }
+        if (result.status === ApiStatus.ERROR) {
+          this.showError.set(true);
+        }
+      },
+      error: (error): void => {
+        this.showLoading.set(false);
+        this.showError.set(true);
+        console.log(error);
+      },
+    });
   }
 
   downStock(): void {

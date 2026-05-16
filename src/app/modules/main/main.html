@@ -32,6 +32,10 @@
             </mat-toolbar-row>
         </mat-toolbar>
         <div class="camera-row">
+            <button class="camera-button"
+                    (click)="checkLocalizador()">
+                <mat-icon>search</mat-icon>
+            </button>
             <mat-form-field class="cod-barras"
                             subscriptSizing="dynamic">
                 <mat-label>Código barras</mat-label>
@@ -40,11 +44,21 @@
                        (keyup.enter)="checkLocalizador()"
                        #codBarrasBox>
             </mat-form-field>
-            <button mat-icon-button
+            <button class="camera-button"
                     (click)="openScanner()">
                 <mat-icon>photo_camera</mat-icon>
             </button>
         </div>
+        @if (showError()) {
+        <div class="error-row">
+            Error al cargar el artículo. Inténtalo de nuevo.
+        </div>
+        }
+        @if (showNotFound()) {
+        <div class="error-row">
+            Artículo no encontrado.
+        </div>
+        }
         @if (showLoading()) {
         <div class="loading-row">
             <mat-progress-spinner mode="indeterminate"
