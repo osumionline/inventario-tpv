@@ -2,13 +2,17 @@ import { Injectable, inject } from '@angular/core';
 import ApiStatus from '@enum/api-status.enum';
 import { LoginResult } from '@interfaces/interfaces';
 import User from '@model/user.model';
+import ApiMarcasService from '@services/api-marcas.service';
 import ClassMapperService from '@services/class-mapper.service';
+import ListService from '@services/list.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export default class UserService {
   private cms: ClassMapperService = inject(ClassMapperService);
+  private apiMarcasService: ApiMarcasService = inject(ApiMarcasService);
+  private listService: ListService = inject(ListService);
 
   logged: boolean = false;
   user: User | null = null;
@@ -27,6 +31,8 @@ export default class UserService {
       }
       this.logged = true;
       this.user = this.cms.getUser(loginObj.user);
+      this.apiMarcasService.loadMarcas();
+      this.listService.loadList();
     } catch (e) {
       console.error('Error cargando datos de inicio:', e);
       this.logout();
@@ -48,5 +54,6 @@ export default class UserService {
     this.logged = false;
     this.user = null;
     localStorage.removeItem('login');
+    this.listService.clearList();
   }
 }

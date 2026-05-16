@@ -7,3 +7,37 @@
         <span class="spacer">Últimos artículos guardados</span>
     </mat-toolbar-row>
 </mat-toolbar>
+
+<main class="list-page">
+    @if (list().length === 0) {
+    <div class="empty-row">
+        No hay artículos guardados.
+    </div>
+    }
+    @else {
+    <div class="article-list">
+        @for (articulo of list(); track $index) {
+        <article class="article-row">
+            <div class="article-main">
+                <span class="brand">{{ articulo.marca || 'Sin marca' }}</span>
+                <span class="name">{{ articulo.nombre }}</span>
+            </div>
+            <div class="article-values">
+                <div class="value-block">
+                    <span class="label">PVP</span>
+                    <span class="value">{{ formatPrice(articulo.pvp) }}</span>
+                    <span class="diff">{{ articulo.diferenciaPVP }}</span>
+                    <span class="change">{{ getPvpChangeText(articulo) }}</span>
+                </div>
+                <div class="value-block">
+                    <span class="label">Stock</span>
+                    <span class="value">{{ articulo.stock }}</span>
+                    <span class="diff">{{ articulo.diferenciaStock }}</span>
+                    <span class="change">{{ getStockChangeText(articulo) }}</span>
+                </div>
+            </div>
+        </article>
+        }
+    </div>
+    }
+</main>

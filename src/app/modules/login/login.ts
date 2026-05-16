@@ -27,8 +27,8 @@ import { LoginData, LoginResult } from '@interfaces/interfaces';
 import ApiStatus from '@model/enum/api-status.enum';
 import Marca from '@model/marca.model';
 import User from '@model/user.model';
+import ApiMarcasService from '@services/api-marcas.service';
 import ApiUsersService from '@services/api-users.service';
-import ApiService from '@services/api.service';
 import ClassMapperService from '@services/class-mapper.service';
 import UserService from '@services/user.service';
 import LoadingIcon from '@shared/loading-icon/loading-icon';
@@ -53,10 +53,10 @@ import LoadingIcon from '@shared/loading-icon/loading-icon';
   styleUrl: './login.scss',
 })
 export default class LoginComponent implements OnInit {
-  private readonly aus: ApiUsersService = inject(ApiUsersService);
-  private readonly as: ApiService = inject(ApiService);
-  private readonly us: UserService = inject(UserService);
-  private readonly cms: ClassMapperService = inject(ClassMapperService);
+  private readonly apiUsersService: ApiUsersService = inject(ApiUsersService);
+  private readonly apiMarcasService: ApiMarcasService = inject(ApiMarcasService);
+  private readonly userService: UserService = inject(UserService);
+  private readonly classMapperService: ClassMapperService = inject(ClassMapperService);
   private readonly router: Router = inject(Router);
 
   loginModel: WritableSignal<LoginData> = signal<LoginData>({
@@ -79,9 +79,13 @@ export default class LoginComponent implements OnInit {
   username: Signal<ElementRef> = viewChild.required<ElementRef>('username');
 
   ngOnInit(): void {
-    if (this.us.logged) {
+    if (this.userService.logged) {
       this.router.navigate(['/main']);
     }
+    this.focus();
+  }
+
+  focus(): void {
     this.username().nativeElement.focus();
   }
 
@@ -92,26 +96,28 @@ export default class LoginComponent implements OnInit {
     this.loginError.set(false);
     this.loading.set(true);
 
-    this.aus.login(this.loginModel()).subscribe({
+    this.apiUsersService.login(this.loginModel()).subscribe({
       next: (result: LoginResult): void => {
         if (result.status === ApiStatus.OK) {
-          this.us.logged = true;
-          this.us.user = new User().fromInterface(result.user);
-          this.us.saveLogin();
+          this.userService.logged = true;
+          this.userService.user = new User().fromInterface(result.user);
+          this.userService.saveLogin();
 
-          this.as.getMarcas().subscribe((result: MarcasResult): void => {
-            const marcas: Marca[] = this.cms.getMarcas(result.list);
-            this.as.marcas = marcas;
+          this.apiMarcasService.getMarcas().subscribe((result: MarcasResult): void => {
+            const marcas: Marca[] = this.classMapperService.getMarcas(result.list);
+            this.apiMarcasService.setMarcas(marcas);
             this.router.navigate(['/main']);
           });
         } else {
           this.loading.set(false);
           this.loginError.set(true);
+          this.focus();
         }
       },
       error: (): void => {
         this.loading.set(false);
         this.loginError.set(true);
+        this.focus();
       },
     });
   }

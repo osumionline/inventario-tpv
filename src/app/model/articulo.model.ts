@@ -24,6 +24,7 @@ export default class Articulo {
     this.localizador = articulo.localizador;
     this.idCategoria = articulo.idCategoria;
     this.idMarca = articulo.idMarca;
+    this.marca = articulo.marca ?? '';
     this.nombre = urldecode(articulo.nombre);
     this.palb = articulo.palb;
     this.puc = articulo.puc;
@@ -62,9 +63,9 @@ export default class Articulo {
     }
     const diff: number = this.pvp - this.pvpPrevio;
     if (diff > 0) {
-      return '+ ' + diff.toFixed(2) + '€';
+      return '+ ' + diff.toFixed(2) + ' €';
     } else {
-      return diff.toFixed(2) + '€';
+      return diff.toFixed(2) + ' €';
     }
   }
 

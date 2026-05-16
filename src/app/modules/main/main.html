@@ -103,7 +103,8 @@
         <div class="save-row">
             <button matButton="filled"
                     (click)="save()"
-                    [disabled]="saving()">
+                    [disabled]="saving()"
+                    [class.saved]="saved()">
                 @if (saving()) {
                 <img src="/img/loading.svg"
                      alt="Guardando">

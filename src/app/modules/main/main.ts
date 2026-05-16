@@ -13,8 +13,10 @@ import { Router, RouterLink } from '@angular/router';
 import ApiStatus from '@enum/api-status.enum';
 import { LocalizadorResult, StatusResult } from '@interfaces/articulo.interfaces';
 import Articulo from '@model/articulo.model';
+import ApiMarcasService from '@services/api-marcas.service';
 import ApiService from '@services/api.service';
 import ClassMapperService from '@services/class-mapper.service';
+import ListService from '@services/list.service';
 import UserService from '@services/user.service';
 import BarcodeScanner from '@shared/barcode-scanner/barcode-scanner';
 
@@ -46,7 +48,9 @@ import BarcodeScanner from '@shared/barcode-scanner/barcode-scanner';
 })
 export default class Main {
   private readonly apiService: ApiService = inject(ApiService);
+  private readonly apiMarcasService: ApiMarcasService = inject(ApiMarcasService);
   private readonly classMapperService: ClassMapperService = inject(ClassMapperService);
+  private readonly listService: ListService = inject(ListService);
   private readonly userService: UserService = inject(UserService);
   private readonly dialog: MatDialog = inject(MatDialog);
   private readonly router: Router = inject(Router);
@@ -101,7 +105,7 @@ export default class Main {
         this.showLoading.set(false);
         if (result.status === ApiStatus.OK && result.articulo) {
           this.articulo = this.classMapperService.getArticulo(result.articulo);
-          this.marca.set(this.apiService.getMarca(this.articulo.idMarca ?? 0)?.nombre ?? '');
+          this.marca.set(this.apiMarcasService.getMarca(this.articulo.idMarca ?? 0)?.nombre ?? '');
           console.log(this.articulo);
           this.showArticulo.set(true);
         }
@@ -148,6 +152,9 @@ export default class Main {
         .subscribe((result: StatusResult): void => {
           this.saving.set(false);
           if (result.status === ApiStatus.OK) {
+            const copia: Articulo = new Articulo().fromInterface(this.articulo!.toInterface());
+            copia.marca = this.marca();
+            this.listService.addArticulo(copia);
             this.saved.set(true);
             setTimeout((): void => {
               this.saved.set(false);

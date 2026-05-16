@@ -14,7 +14,7 @@ export interface ArticuloInterface {
   localizador: number | null;
   idCategoria: number | null;
   idMarca: number | null;
-  marca: string | null;
+  marca?: string | null;
   nombre: string | null;
   palb: number | null;
   puc: number | null;
