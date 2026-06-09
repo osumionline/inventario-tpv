@@ -1,11 +1,9 @@
-import { Injectable, WritableSignal, inject, signal } from '@angular/core';
+import { Service, WritableSignal, inject, signal } from '@angular/core';
 import { ArticuloInterface } from '@interfaces/articulo.interfaces';
 import Articulo from '@model/articulo.model';
 import ClassMapperService from '@services/class-mapper.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export default class ListService {
   private readonly classMapperService: ClassMapperService = inject(ClassMapperService);
   private readonly storageKey: string = 'articulos-list';

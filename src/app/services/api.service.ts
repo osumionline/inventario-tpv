@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 import {
   ArticuloInterface,
   LocalizadorResult,
@@ -7,9 +7,7 @@ import {
 import ApiBaseService from '@services/api-base.service';
 import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export default class ApiService extends ApiBaseService {
   checkLocalizador(localizador: string): Observable<LocalizadorResult> {
     return this.http.post<LocalizadorResult>(this.apiUrl + 'check-localizador', { localizador });

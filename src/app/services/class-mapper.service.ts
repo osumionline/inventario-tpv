@@ -1,13 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 import { ArticuloInterface, MarcaInterface } from '@interfaces/articulo.interfaces';
 import { UserInterface } from '@interfaces/user.interfaces';
 import Articulo from '@model/articulo.model';
 import Marca from '@model/marca.model';
 import User from '@model/user.model';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export default class ClassMapperService {
   getUser(u: UserInterface): User {
     return new User().fromInterface(u);

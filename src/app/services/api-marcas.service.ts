@@ -1,13 +1,11 @@
-import { Injectable, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { MarcaInterface, MarcasResult } from '@app/interfaces/articulo.interfaces';
 import Marca from '@app/model/marca.model';
 import ApiBaseService from '@services/api-base.service';
 import ClassMapperService from '@services/class-mapper.service';
 import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export default class ApiMarcasService extends ApiBaseService {
   private readonly classMapperService: ClassMapperService = inject(ClassMapperService);
   private readonly storageKey: string = 'marcas';

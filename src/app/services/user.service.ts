@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import ApiStatus from '@enum/api-status.enum';
 import { LoginResult } from '@interfaces/interfaces';
 import User from '@model/user.model';
@@ -6,9 +6,7 @@ import ApiMarcasService from '@services/api-marcas.service';
 import ClassMapperService from '@services/class-mapper.service';
 import ListService from '@services/list.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export default class UserService {
   private cms: ClassMapperService = inject(ClassMapperService);
   private apiMarcasService: ApiMarcasService = inject(ApiMarcasService);
